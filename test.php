@@ -1,12 +1,12 @@
 <?php
-require_once("resources.php");
+require_once("resource.php");
 // require_once("skill.php");
 require_once("skills.php");
 $db = new mysqli("localhost","root","","planificateur");
-$resources = new resources($db);
+$resource = new resource($db);
 $skills = new Skills($db);
 echo '<pre>';
-var_dump($resources -> getResources());
+var_dump($resource -> setValues());
 echo '</pre>';
 
 // $resources=new resources($db);
