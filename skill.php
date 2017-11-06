@@ -10,12 +10,13 @@ class Skill {
     if ($id) {
       $this->id = $id;
     }
+    $this->db = $db;
   }
 
   public function addSkill ($skillName) {
-    var_dump(array($this->test, $skillName));
+    $this->db->query('INSERT INTO skills (name) VALUES ("'.$skillName.'")');
   }
 
 }
 
- ?>
+?>

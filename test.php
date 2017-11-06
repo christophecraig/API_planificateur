@@ -3,9 +3,9 @@ require_once("resources.php");
 require_once("skill.php");
 $db = new mysqli("localhost","root","","planificateur");
 
-$skills = new Skill($db);
+$skills = new Skills($db);
 
-$skills->addSkill('excellent');
+$skills->getSkills();
 
 
 // $resources=new resources($db);
