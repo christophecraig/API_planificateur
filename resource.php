@@ -30,17 +30,21 @@ class resource  {
             $this -> available = $dbri -> available;
         }
         //Requête pour aller chercher les compétences de la resource 
+        $this -> skills = $this -> db -> query("SELECT efficiency.efficiency, skills.name FROM skills INNER JOIN efficiency WHERE efficiency.resource_id =". $this -> id)->fetch_all(); 
+        // Voir pourquoi on doit fetch_all à chaque fois
     }
     
     public function setValues($datas = null) {
         $usedAliases = $this -> db -> query("select alias from resource") -> fetch_all();
         foreach ($usedAliases as $aliasKey => $alias) {
-            echo '<li>'.$alias[0].'</li>';
+            if (strtolower($datas["alias"]) === strtolower($alias[0])) {
+                return 'Cet alias existe déjà !';
+            }
         }
 
-        // foreach ($datas as $key => $val) {
-        //     if ($key! = "id") $this -> $key = $val;
-        // }
+        foreach ($datas as $key => $val) {
+            if ($key != "id") $this -> $key = $val;
+        }
     }
     
     public function getValues() {
@@ -50,7 +54,8 @@ class resource  {
           "firstname" => $this -> firstname,
           "alias" => $this -> alias,
           "efficiency" => $this -> efficiency,
-          "available" => $this -> available
+          "available" => $this -> available,
+          "skills" => $this -> skills
         ];
     }
     

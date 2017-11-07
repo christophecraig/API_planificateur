@@ -22,7 +22,21 @@ class Skills {
         return $skill -> getValues();
     }
     return null;
-}
+  }
+
+  public function addSkill($datas) {
+    $skill = new skill($this -> db);
+    $skill -> setValues($datas);
+    $skill -> save();
+    return $skill -> getId();
+  }
+
+  public function updateSkill($id, $datas) {
+      $skill = new skill($this -> db, $id);
+      $skill -> setValues($datas);
+      $skill -> save();
+      return $skill -> getValues();
+  }
 
 }
 

@@ -1,5 +1,5 @@
 <?php
-require_once("dataManipulation.php");
+// require_once("dataManipulation.php");
 require_once("resource.php");
 
 class resources {
