@@ -19,9 +19,9 @@ class resource  {
     }
     
     private function getDbValues() {
-        $dbr = $this -> db -> query("select * from resource where id=".$this->id);
+        $dbr = $this -> db -> query("SELECT * FROM resource WHERE id = ".$this -> id);
         if ($dbr) {
-            $dbri=$dbr->fetch_object();
+            $dbri = $dbr -> fetch_object();
             $this -> id = $dbri -> id;
             $this -> name = $dbri -> name;
             $this -> firstname = $dbri -> firstname;
@@ -33,11 +33,8 @@ class resource  {
     }
     
     public function setValues($datas = null) {
-        // if ($datas) {
-
-        // }
-        $existingAliases = $this -> db -> query("select alias from resource") -> fetch_all();
-        foreach ($existingAliases as $aliasKey => $alias) {
+        $usedAliases = $this -> db -> query("select alias from resource") -> fetch_all();
+        foreach ($usedAliases as $aliasKey => $alias) {
             echo '<li>'.$alias[0].'</li>';
         }
 
@@ -63,12 +60,12 @@ class resource  {
     
     public function save() {
         //Attention vérifier les valeurs
-        $this -> db -> query("replace into resource (id,name,firstname,efficiency,available) values(".$this -> id.", '".
+        $this -> db -> query("REPLACE INTO resource (id,name,firstname,efficiency,available) VALUES (".$this -> id.", '".
             $this -> db -> escape_string($this -> name)."','".
             $this -> db -> escape_string($this -> firstname)."',".
             $this -> db -> escape_string($this -> alias)."',".
             $this -> efficiency.",".
             $this -> available.")");
-        if (!$this->id) $this->id=$this->db->insert_id;
+        if (!$this->id) $this -> id = $this -> db -> insert_id;
     }
 }

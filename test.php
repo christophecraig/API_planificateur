@@ -5,9 +5,7 @@ require_once("skills.php");
 $db = new mysqli("localhost","root","","planificateur");
 $resource = new resource($db);
 $skills = new Skills($db);
-echo '<pre>';
-var_dump($resource -> setValues());
-echo '</pre>';
+$resource->setValues();
 
 // $resources=new resources($db);
 //
