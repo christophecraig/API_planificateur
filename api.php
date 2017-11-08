@@ -88,7 +88,7 @@ class API extends REST
 
 	private function restskillstest()
 	{
-		echo 'excellent';
+		return 'excellent';
 	}
 		
 		/* 
