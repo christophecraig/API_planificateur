@@ -1,17 +1,23 @@
 <?php
-// require_once("resource.php");
-require_once("resources.php");
-require_once("skills.php");
-$db = new mysqli("localhost","root","","planificateur");
-$resources = new resources($db);
-echo '<pre>';
-$detailedResource = $resources->getResource(3);
-foreach ($detailedResource as $key => $value) {
-    echo '</pre></li><li><strong>' . $key . '</strong><br><pre>';
-    var_dump($value);
-}
 
-$skills = new Skills($db);
+echo '<pre>';
+var_dump($_SERVER["REQUEST_URI"]);
+echo '</pre>';
+
+
+// require_once("resource.php");
+// require_once("resources.php");
+// require_once("skills.php");
+// $db = new mysqli("localhost","root","","planificateur");
+// $resources = new resources($db);
+// echo '<pre>';
+// $detailedResource = $resources->getResource(3);
+// foreach ($detailedResource as $key => $value) {
+//     echo '</pre></li><li><strong>' . $key . '</strong><br><pre>';
+//     var_dump($value);
+// }
+
+// $skills = new Skills($db);
 
 // $resources=new resources($db);
 //
