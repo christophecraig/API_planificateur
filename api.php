@@ -1,5 +1,5 @@
 <?php
-    
+     header("Access-Control-Allow-Origin: *");
 	/* 
 		This is an example class script proceeding secured API
 		To use this class you should keep same as query string and function name
@@ -48,6 +48,11 @@ class API extends REST
 	private $func = NULL;
 	private $db = NULL;
 
+	private $entity = "";
+	// private $function = "";
+	private $function = "";
+	private $parameters = [];
+
 	public function __construct()
 	{
 		parent::__construct();				// Init parent contructor
@@ -69,26 +74,31 @@ class API extends REST
 	 */
 	public function processApi()
 	{
-		var_dump($_REQUEST);
 		$func = strtolower(trim(str_replace("/", "", $_REQUEST['rquest'])));
 		$req = explode("/", strtolower($_REQUEST["rquest"]));
-		$entity = $req[0];
-		if (count($req) > 1) {
-			$function = $req[1];
-		}
+		// $req[0] = "rest" à voir pour enlever ça de l'url
+		// Faire la décomposition dans une autre fonction pour pouvoir retourner les valeurs tout en les conservant en privé ($function par ex)
+		$this->entity = $req[1];
 		if (count($req) > 2) {
-			$parameters = $req[2];
+			$function = $req[2];
 		}
-		var_dump($req);
-		if ((int)method_exists($this, $func) > 0)
-			$this->$func();
+		if (count($req) > 3) {
+			$this->parameters = $req[3];
+		}
+		if ((int)method_exists($this, $function) > 0)
+			$this->response(call_user_func_array(array($this,$function),array()), 200);		
 		else
-			$this->response('', 404);				// If the method not exist with in this class, response would be "Page not found".
+			$this->response('', 404);		// If the method does not exist with in this class, response would be "Page not found".
 	}
 
-	private function restskillstest()
+	private function get ()
 	{
-		return 'excellent';
+		$toReturn = [];
+		$response = $this->db->query("SELECT * FROM " . $this->entity)->fetch_all();
+		foreach ($response as $key => $value) {
+			array_push($toReturn, $value);
+		}
+		return json_encode($toReturn);
 	}
 		
 		/* 
