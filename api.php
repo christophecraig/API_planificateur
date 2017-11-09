@@ -1,5 +1,5 @@
 <?php
-     header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 	/* 
 		This is an example class script proceeding secured API
 		To use this class you should keep same as query string and function name
@@ -34,6 +34,8 @@
  */
 
 require_once ("Rest.inc.php");
+require_once ("resources.php");
+require_once ("skills.php");
 
 class API extends REST
 {
@@ -49,9 +51,8 @@ class API extends REST
 	private $db = NULL;
 
 	private $entity = "";
-	// private $function = "";
 	private $function = "";
-	private $parameters = [];
+	private $parameter = "";
 
 	public function __construct()
 	{
@@ -74,31 +75,56 @@ class API extends REST
 	 */
 	public function processApi()
 	{
-		$func = strtolower(trim(str_replace("/", "", $_REQUEST['rquest'])));
+		// $func = strtolower(trim(str_replace("/", "", $_REQUEST['rquest'])));
 		$req = explode("/", strtolower($_REQUEST["rquest"]));
 		// $req[0] = "rest" à voir pour enlever ça de l'url
 		// Faire la décomposition dans une autre fonction pour pouvoir retourner les valeurs tout en les conservant en privé ($function par ex)
 		$this->entity = $req[1];
 		if (count($req) > 2) {
-			$function = $req[2];
+			$this->function = $req[2];
 		}
 		if (count($req) > 3) {
-			$this->parameters = $req[3];
+			$this->parameter = $req[3];
 		}
-		if ((int)method_exists($this, $function) > 0)
-			$this->response(call_user_func_array(array($this,$function),array()), 200);		
+		if ((int)method_exists($this, $this->function) > 0)
+			$this->response(call_user_func_array(array($this, $this->function), array()), 200);
 		else
 			$this->response('', 404);		// If the method does not exist with in this class, response would be "Page not found".
 	}
 
-	private function get ()
+	private function get()
 	{
 		$toReturn = [];
-		$response = $this->db->query("SELECT * FROM " . $this->entity)->fetch_all();
-		foreach ($response as $key => $value) {
-			array_push($toReturn, $value);
+		switch ($this->entity) {
+			case "skills":
+				$skills = new skills($this->db);
+				$response = $skills->getSkills();
+				break;
+			case "resource":
+				$resources = new resources($this->db);
+				if (!$this->parameter) {
+					$response = $resources->getResources();					
+				} else if (is_numeric($this->parameter)) {		// Ici on vérifie que l'id en paramètre est bien un nombre
+					$response = $resources->getResource($this->parameter);
+				} else {
+					$response = "Incorrect resource Id";
+				}
+				break;
+			case "customers":
+				$customers = new customers($this->db);
+				$response = $customers->getCustomers();
+				break;
+			case "developments":
+				$developments = new developments($this->db);
+				$response = $developments->getDevelopments();
+				break;
+			case "projects":
+				$projects = new projects($this->db);
+				$response = $projects->getProjects();
+				break;
 		}
-		return json_encode($toReturn);
+
+		return json_encode($response);
 	}
 		
 		/* 

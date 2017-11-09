@@ -11,8 +11,7 @@ class resources {
     }
 
     public function getResources() {
-        // $dbrs = $this -> db -> query("select id, concat(name,' ',firstname) as alias from resource");
-        $dbrs = $this -> db -> query("SELECT id, alias FROM resource ORDER BY name");
+        $dbrs = $this -> db -> query("SELECT * FROM resource ORDER BY name");
         $response = array();
         while ($dbrsi = $dbrs -> fetch_object()) {
             $response[] = $dbrsi;
