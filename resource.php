@@ -20,6 +20,7 @@ class resource  {
     
     private function getDbValues() {
         $dbr = $this -> db -> query("SELECT * FROM resource WHERE id = ".$this -> id);
+        
         if ($dbr) {
             $dbri = $dbr -> fetch_object();
             $this -> id = $dbri -> id;
@@ -30,7 +31,11 @@ class resource  {
             $this -> available = $dbri -> available;
         }
         //Requête pour aller chercher les compétences de la resource 
-        $this -> skills = $this -> db -> query("SELECT efficiency.efficiency, skills.name FROM skills INNER JOIN efficiency WHERE efficiency.resource_id =". $this -> id)->fetch_all(); 
+        $dbrs = $this -> db -> query("SELECT efficiency.efficiency, skills.name FROM skills INNER JOIN efficiency WHERE efficiency.resource_id =". $this -> id); 
+        $response = array();
+        while ($dbrsi = $dbrs -> fetch_object()) {
+            $this->skills[] = $dbrsi;
+        }
         // Voir pourquoi on doit fetch_all à chaque fois
     }
     
