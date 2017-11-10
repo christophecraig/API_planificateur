@@ -24,7 +24,7 @@ class resources {
             $resource = new resource($this -> db, $id);
             return $resource -> getValues();
         }
-        return null;
+        return NULL;
     }
 
     public function addResource($datas) {
