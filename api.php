@@ -36,6 +36,7 @@ header("Access-Control-Allow-Origin: *");
 require_once ("Rest.inc.php");
 require_once ("resources.php");
 require_once ("skills.php");
+require_once ("customers.php");
 
 class API extends REST
 {
@@ -78,7 +79,6 @@ class API extends REST
 		// $func = strtolower(trim(str_replace("/", "", $_REQUEST['rquest'])));
 		$req = explode("/", strtolower($_REQUEST["rquest"]));
 		// $req[0] = "rest" à voir pour enlever ça de l'url
-		// Faire la décomposition dans une autre fonction pour pouvoir retourner les valeurs tout en les conservant en privé ($function par ex)
 		$this->entity = $req[1];
 		if (count($req) > 2) {
 			$this->function = $req[2];
@@ -100,7 +100,7 @@ class API extends REST
 				$skills = new skills($this->db);
 				$response = $skills->getSkills();
 				break;
-			case "resource":
+			case "resources":
 				$resources = new resources($this->db);
 				if (!$this->parameter) {
 					$response = $resources->getResources();					
@@ -112,7 +112,13 @@ class API extends REST
 				break;
 			case "customers":
 				$customers = new customers($this->db);
-				$response = $customers->getCustomers();
+				if (!$this->parameter) {
+					$response = $customers->getCustomers();
+				} else if (is_numeric($this->parameter)) {
+					$response = $customers->getCustomer($this->parameter);
+				} else {
+					$response = "Incorrect customer Id";
+				}
 				break;
 			case "developments":
 				$developments = new developments($this->db);
@@ -147,7 +153,7 @@ class API extends REST
 			// Input validations
 		if (!empty($email) and !empty($password)) {
 			if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$sql = $this->db->query("SELECT user_id, user_fullname, user_email FROM users WHERE user_email = '$email' AND user_password = '" . md5($password) . "' LIMIT 1");
+				$sql = $this->db->query("SELECT id, username, email FROM users WHERE user = '$email' AND password = '" . md5($password) . "' LIMIT 1");
 				if ($this->db->affected_rows() > 0) {
 					$result = $sql->fetch_array();
 						
@@ -197,7 +203,7 @@ class API extends REST
 	}
 		
 		/*
-	 *	Encode array into JSON
+		Encode array into JSON
 	 */
 	private function json($data)
 	{
