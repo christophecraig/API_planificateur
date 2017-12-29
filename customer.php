@@ -4,6 +4,7 @@ class Customer
 {
   private $id = 0;
   private $name = "";
+  private $email = "";
   private $db = null;
 
   public function __construct($db, $id = 0)
@@ -25,11 +26,10 @@ class Customer
     $dbr = $this->db->query("SELECT * FROM customers WHERE id = " . $this->id);
     if ($dbr) {
       $dbri = $dbr->fetch_object();
-      // var_dump($dbri);
       $this->id = $dbri->id;
       $this->name = $dbri->name;
+      $this->email = $dbri->email;
     }
-    //Requête pour aller chercher les compétences de la resource
   }
 
   public function getValues()

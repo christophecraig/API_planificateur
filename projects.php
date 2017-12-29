@@ -12,38 +12,38 @@ class Projects
     $this->db = $db;
   }
 
-  public function getCustomers()
+  public function getProjects()
   {
-    $dbrs = $this->db->query("SELECT * FROM customers ORDER BY name");
+    $dbrs = $this->db->query("SELECT * FROM projects ORDER BY name");
     while ($dbrsi = $dbrs->fetch_object()) {
       $response[] = $dbrsi;
     }
     return $response;
   }
 
-  public function getCustomer($id)
+  public function getProject($id)
   {
     if ($id) {
-      $customer = new customer($this->db, $id);
-      return $customer->getValues();
+      $project = new project($this->db, $id);
+      return $project->getValues();
     }
     return null;
   }
 
-  public function addCustomer($datas)
+  public function addProject($datas)
   {
-    $customer = new customer($this->db);
-    $customer->setValues($datas);
-    $customer->save();
-    return $customer->getId();
+    $project = new project($this->db);
+    $project->setValues($datas);
+    $project->save();
+    return $project->getId();
   }
 
-  public function updateCustomer($id, $datas)
+  public function updateProject($id, $datas)
   {
-    $customer = new customer($this->db, $id);
-    $customer->setValues($datas);
-    $customer->save();
-    return $customer->getValues();
+    $project = new project($this->db, $id);
+    $project->setValues($datas);
+    $project->save();
+    return $project->getValues();
   }
 
 }

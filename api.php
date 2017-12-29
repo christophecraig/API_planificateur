@@ -132,6 +132,10 @@ class API extends REST
 
 		return json_encode($response);
 	}
+
+	private function add() {
+		
+	}
 		
 		/* 
 	 *	Simple login API

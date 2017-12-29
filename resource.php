@@ -33,7 +33,7 @@ class resource
             $this->efficiency = $dbri->efficiency;
             $this->available = $dbri->available;
         // Requête pour aller chercher les compétences de la resource 
-            $dbrs = $this->db->query("SELECT efficiency.efficiency, skills.name FROM skills INNER JOIN efficiency WHERE efficiency.resource_id =" . $this->id);
+            $dbrs = $this->db->query("SELECT efficiency.value, skills.name FROM skills INNER JOIN efficiency WHERE efficiency.resource_id =" . $this->id);
             $response = array();
             while ($dbrsi = $dbrs->fetch_object()) {
                 $this->skills[] = $dbrsi;
